@@ -1,5 +1,5 @@
 // Method manager class to manage the permissions of a method
-export default class MethodManager {
+export default class Method {
     #name
     #profiles
 

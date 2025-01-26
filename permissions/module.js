@@ -1,4 +1,4 @@
-import ObjectManager from "./objectManager";
+import Object from "./object.js";
 import Script from "@ralvarezdev/js-reflection";
 
 // Errors that can be thrown by the module manager
@@ -12,7 +12,7 @@ export const USER_NOT_AUTHORIZED_ERROR = 'User not authorized'
 const scripts = {}
 
 // Routes module management for permissions
-export default class ModuleManager {
+export default class Module {
     #name
     #nestedModules
     #objects
@@ -49,7 +49,7 @@ export default class ModuleManager {
     // Create a new nested module in the module manager
     createNestedModule(name) {
         // Create a new nested module
-        const nestedModule = new ModuleManager(name)
+        const nestedModule = new Module(name)
 
         // Add the nested module to the module manager
         this.addNestedModule(nestedModule)
@@ -108,7 +108,7 @@ export default class ModuleManager {
     // Create a new object in the module manager
     createObject(scriptName, objectName) {
         // Create a new object
-        const object = new ObjectManager(scriptName, objectName)
+        const object = new Object(scriptName, objectName)
 
         // Add the object to the module manager
         this.addObject(object)
@@ -261,5 +261,5 @@ export default class ModuleManager {
 
 // NewRootModuleManager creates a new root module manager
 export function NewRootModuleManager() {
-    return new ModuleManager()
+    return new Module()
 }

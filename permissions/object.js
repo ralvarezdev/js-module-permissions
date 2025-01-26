@@ -1,11 +1,11 @@
-import MethodManager from "./methodManager";
+import Method from "./method.js";
 
 // Errors that can be thrown by the module manager
 export const METHOD_NOT_FOUND_ERROR = 'Method not found'
 export const METHOD_ALREADY_EXISTS_ERROR = 'Method already exists'
 
 // Object manager class to manage the permissions of an object
-export default class ObjectManager {
+export default class Object {
     #scriptName
     #name
     #methods
@@ -41,7 +41,7 @@ export default class ObjectManager {
     // Create a new method in the object manager
     createMethod(name, ...allowedProfiles) {
         // Create a new method
-        const method = new MethodManager(name)
+        const method = new Method(name)
 
         // Set the allowed profiles for the method
         method.allow(allowedProfiles)
