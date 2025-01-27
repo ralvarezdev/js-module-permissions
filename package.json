@@ -1,6 +1,6 @@
 {
   "name": "@ralvarezdev/js-module-permissions",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Module permissions implementation for JavaScript projects",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ralvarezdev/js-module-permissions#readme",
   "dependencies": {
-    "@ralvarezdev/js-reflection": "^0.3.3"
+    "@ralvarezdev/js-reflection": "^0.3.6"
   },
   "type": "module"
 }
