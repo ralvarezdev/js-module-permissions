@@ -76,16 +76,13 @@ export async function MigratePermissionsToObjectManager(objectManager, logger) {
         // Get the class method
         const classMethod = ClassMethods[classMethodName];
 
-        // Create a new method in the object manager
-        const methodManager = objectManager.createMethod(classMethodName, classMethod);
-
         // Get the descriptors of the class method
         const descriptor = GetDescriptor(Class, classMethodName);
 
         // Get the allowed profiles for the method
         const allowedProfiles = GetMetadataProfiles(descriptor);
 
-        // Set the allowed profiles for the method
-        methodManager.allow(...allowedProfiles);
+        // Create a new method in the object manager
+        objectManager.createMethod(classMethodName, classMethod, ...allowedProfiles);
     }
 }

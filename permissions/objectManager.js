@@ -54,17 +54,17 @@ export default class ObjectManager {
     }
 
     // Create a new method in the object manager
-    createMethod(name, ...allowedProfiles) {
+    createMethod(name, method, ...allowedProfiles) {
         // Create a new method
-        const method = new MethodManager(name)
+        const methodManager = new MethodManager(name, method)
 
         // Set the allowed profiles for the method
-        method.allow(allowedProfiles)
+        methodManager.allow(allowedProfiles)
 
         // Add the method to the module manager
-        this.addMethod(method)
+        this.addMethod(methodManager)
 
-        return method
+        return methodManager
     }
 
     // Checks if a method exists in the object manager

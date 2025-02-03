@@ -163,12 +163,12 @@ export default class ModuleManager {
     }
 
     // Create a new method in the module manager
-    createMethod(objectName, methodName, ...allowedProfiles) {
+    createMethod(objectName, methodName, methodFn, ...allowedProfiles) {
         // Get the object
         const object = this.getObject(objectName)
 
         // Create a new method
-        return object.createMethod(methodName, allowedProfiles)
+        return object.createMethod(methodName, methodFn, allowedProfiles)
     }
 
     // Checks if a method exists in the module manager
