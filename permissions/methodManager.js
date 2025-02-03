@@ -1,12 +1,16 @@
 // Method manager class to manage the permissions of a method
-export default class Method {
+export default class MethodManager {
     #name
     #profiles
+    #method
 
-    // Initialize the method with a name
-    constructor(name) {
+    // Initialize the method with a name and its function
+    constructor(name, method) {
         // Set the method name
         this.#name = name
+
+        // Set the method function
+        this.#method = method
 
         // Initialize the profiles object
         this.#profiles = {}
@@ -15,6 +19,11 @@ export default class Method {
     // Get the name of the method
     get name() {
         return this.#name
+    }
+
+    // Get the method function
+    get method() {
+        return this.#method
     }
 
     // Allow the method to be executed by a user with a specific profile

@@ -1,19 +1,24 @@
-import Method from "./method.js";
+import MethodManager from "./methodManager.js";
+import Script from "@ralvarezdev/js-reflection";
 
 // Errors that can be thrown by the module manager
 export const METHOD_NOT_FOUND_ERROR = 'Method not found'
 export const METHOD_ALREADY_EXISTS_ERROR = 'Method already exists'
 
 // Object manager class to manage the permissions of an object
-export default class Object {
-    #scriptName
+export default class ObjectManager {
+    #scriptPath
+    #script
     #name
     #methods
 
     // Initialize the object with a name
-    constructor(scriptName, name) {
-        // Set the script name
-        this.#scriptName = scriptName
+    constructor(scriptPath, name) {
+        // Set the script path
+        this.#scriptPath = scriptPath
+
+        // Create a script object
+        this.#script = new Script(scriptPath)
 
         // Set the object name
         this.#name = name
@@ -22,6 +27,16 @@ export default class Object {
     // Get the name of the object
     get name() {
         return this.#name
+    }
+
+    // Get the class of the object from the script
+    async getClass() {
+        return await this.#script.getClass(this.#name)
+    }
+
+    // Get the class methods of the object from the script
+    async getClassMethods() {
+        return await this.#script.getClassMethods(this.#name)
     }
 
     // Add a method to the object manager
@@ -41,7 +56,7 @@ export default class Object {
     // Create a new method in the object manager
     createMethod(name, ...allowedProfiles) {
         // Create a new method
-        const method = new Method(name)
+        const method = new MethodManager(name)
 
         // Set the allowed profiles for the method
         method.allow(allowedProfiles)
@@ -78,6 +93,11 @@ export default class Object {
             throw new Error(METHOD_NOT_FOUND_ERROR + ": " + name)
 
         delete this.#methods[name]
+    }
+
+    // Get method function
+    async getMethodFunction(name) {
+        return await this.#script.getObjectProperty(this.#name, name)
     }
 
     // Allow the method to be executed by a user with a specific profile

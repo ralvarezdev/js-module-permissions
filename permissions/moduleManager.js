@@ -1,4 +1,4 @@
-import Object from "./object.js";
+import ObjectManager from "./objectManager.js";
 import Script from "@ralvarezdev/js-reflection";
 
 // Errors that can be thrown by the module manager
@@ -12,7 +12,7 @@ export const USER_NOT_AUTHORIZED_ERROR = 'User not authorized'
 const scripts = {}
 
 // Routes module management for permissions
-export default class Module {
+export default class ModuleManager {
     #name
     #nestedModules
     #objects
@@ -49,7 +49,7 @@ export default class Module {
     // Create a new nested module in the module manager
     createNestedModule(name) {
         // Create a new nested module
-        const nestedModule = new Module(name)
+        const nestedModule = new ModuleManager(name)
 
         // Add the nested module to the module manager
         this.addNestedModule(nestedModule)
@@ -108,7 +108,7 @@ export default class Module {
     // Create a new object in the module manager
     createObject(scriptName, objectName) {
         // Create a new object
-        const object = new Object(scriptName, objectName)
+        const object = new ObjectManager(scriptName, objectName)
 
         // Add the object to the module manager
         this.addObject(object)
@@ -223,7 +223,7 @@ export default class Module {
     }
 
     // Get the loaded script
-    async getLoadedScript(scriptPath){
+    async getLoadedScript(scriptPath) {
         // Check if the script is not loaded
         if (!scripts[scriptPath])
             scripts[scriptPath] = new Script(scriptPath)
@@ -236,7 +236,7 @@ export default class Module {
     async executeMethod(route, profile, ...params) {
         // Check if the route can be executed by the user
         if (!this.canBeExecutedBy(route, profile))
-            throw new Error(USER_NOT_AUTHORIZED_ERROR+ ": " + profile)
+            throw new Error(USER_NOT_AUTHORIZED_ERROR + ": " + profile)
 
         // Get the loaded script
         const loadedScript = await this.getLoadedScript(route.path)
@@ -249,7 +249,7 @@ export default class Module {
     async safeExecuteMethod(route, profile, ...params) {
         // Check if the route can be executed by the user
         if (!this.canBeExecutedBy(route, profile))
-            throw new Error(USER_NOT_AUTHORIZED_ERROR+ ": " + profile)
+            throw new Error(USER_NOT_AUTHORIZED_ERROR + ": " + profile)
 
         // Get the loaded script
         const loadedScript = await this.getLoadedScript(route.path)
@@ -261,5 +261,5 @@ export default class Module {
 
 // NewRootModuleManager creates a new root module manager
 export function NewRootModuleManager() {
-    return new Module()
+    return new ModuleManager()
 }
