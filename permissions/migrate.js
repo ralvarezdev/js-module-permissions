@@ -10,6 +10,9 @@ export default async function MigratePermissions(path, matchScriptName, matchCla
 
     // Migrate the permissions from the metadata of each method from the given path to the module manager
     await MigratePermissionsToModuleManager(path, rootModuleManager, matchScriptName, matchClassName);
+
+    // Return the root module manager
+    return rootModuleManager;
 }
 
 // Migrate the permissions from the metadata of each method from the given path to the module manager
