@@ -10,7 +10,7 @@ export default class ObjectManager {
     #scriptPath
     #script
     #name
-    #methods
+    #methods = {}
 
     // Initialize the object with a name
     constructor(scriptPath, name) {
@@ -59,7 +59,7 @@ export default class ObjectManager {
         const methodManager = new MethodManager(name, method)
 
         // Set the allowed profiles for the method
-        methodManager.allow(allowedProfiles)
+        methodManager.allow(...allowedProfiles)
 
         // Add the method to the module manager
         this.addMethod(methodManager)

@@ -1,6 +1,5 @@
 import * as fs from "node:fs";
 import {NewRootModuleManager} from "./moduleManager.js";
-import {GetDescriptor} from "@ralvarezdev/js-decorator";
 import {GetMetadataProfiles} from "./decorator.js";
 import path from "path";
 
@@ -40,7 +39,7 @@ export async function MigratePermissionsToModuleManager(dirPath, rootModuleManag
             const nestedModuleManager = rootModuleManager.createNestedModule(name);
 
             // Migrate the permissions from the metadata of each method from the nested path to the module manager
-            await MigratePermissionsToModuleManager(nestedPath, nestedModuleManager, logger);
+            await MigratePermissionsToModuleManager(nestedPath, nestedModuleManager, matchScriptName, matchClassName, logger);
         } else {
             // Check if the script name matches
             if (matchScriptName && name !== matchScriptName)
@@ -76,11 +75,8 @@ export async function MigratePermissionsToObjectManager(objectManager, logger) {
         // Get the class method
         const classMethod = ClassMethods[classMethodName];
 
-        // Get the descriptors of the class method
-        const descriptor = GetDescriptor(Class, classMethodName);
-
         // Get the allowed profiles for the method
-        const allowedProfiles = GetMetadataProfiles(descriptor);
+        const allowedProfiles = GetMetadataProfiles(Class, classMethodName);
 
         // Create a new method in the object manager
         objectManager.createMethod(classMethodName, classMethod, ...allowedProfiles);

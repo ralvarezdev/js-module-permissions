@@ -1,7 +1,7 @@
 // Method manager class to manage the permissions of a method
 export default class MethodManager {
     #name
-    #profiles
+    #profiles={}
     #method
 
     // Initialize the method with a name and its function
@@ -11,9 +11,6 @@ export default class MethodManager {
 
         // Set the method function
         this.#method = method
-
-        // Initialize the profiles object
-        this.#profiles = {}
     }
 
     // Get the name of the method
@@ -39,5 +36,15 @@ export default class MethodManager {
     // Check if the method can be executed by a user with a specific profile
     canBeExecutedBy(profile) {
         return this.#profiles[profile] === true
+    }
+
+    // Get the profiles that can execute the method
+    get allowedProfiles() {
+        return Object.keys(this.#profiles).filter(profile => this.#profiles[profile])
+    }
+
+    // Get the profiles that cannot execute the method
+    get disallowedProfiles() {
+        return Object.keys(this.#profiles).filter(profile => !this.#profiles[profile])
     }
 }

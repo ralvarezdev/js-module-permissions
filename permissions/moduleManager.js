@@ -14,17 +14,13 @@ const scripts = {}
 // Routes module management for permissions
 export default class ModuleManager {
     #name
-    #nestedModules
-    #objects
+    #nestedModules={}
+    #objects={}
 
     // Initialize the module manager
     constructor(name) {
         // Set the module manager name
         this.#name = name
-
-        // Initialize the modules and objects
-        this.#nestedModules = {}
-        this.#objects = {}
     }
 
     // Get the module manager name
