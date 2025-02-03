@@ -3,4 +3,4 @@ export {
     MigratePermissions,
     MigratePermissionsToModuleManager,
     MigratePermissionsToObjectManager, AddMetadataProfiles, GetMetadataProfiles
-} from "./permissions";
+} from "./permissions/index.js";
