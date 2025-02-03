@@ -106,9 +106,9 @@ export default class ModuleManager {
     }
 
     // Create a new object in the module manager
-    createObject(scriptName, objectName) {
+    createObject(scriptPath, objectName) {
         // Create a new object
-        const object = new ObjectManager(scriptName, objectName)
+        const object = new ObjectManager(scriptPath, objectName)
 
         // Add the object to the module manager
         this.addObject(object)

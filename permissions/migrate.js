@@ -51,7 +51,7 @@ export async function MigratePermissionsToModuleManager(dirPath, rootModuleManag
                 logger.info(`Script found: ${name}`);
 
             // Create the object manager and add it to the module manager
-            const objectManager = rootModuleManager.createObject(name, matchClassName)
+            const objectManager = rootModuleManager.createObject(nestedPath, matchClassName)
 
             // Migrate the permissions from the metadata of each method from the nested path to the object manager
             await MigratePermissionsToObjectManager(objectManager, logger);
