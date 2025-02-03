@@ -2,27 +2,28 @@ import * as fs from "node:fs";
 import {NewRootModuleManager} from "./moduleManager.js";
 import {GetDescriptor} from "@ralvarezdev/js-decorator";
 import {GetMetadataProfiles} from "./decorator.js";
+import path from "path";
 
 // Migrate the permissions from the metadata of each method from the given path
-export default async function MigratePermissions(path, matchScriptName, matchClassName) {
+export default async function MigratePermissions(dirPath, matchScriptName, matchClassName) {
     // Create the root module manager
     const rootModuleManager = new NewRootModuleManager();
 
     // Migrate the permissions from the metadata of each method from the given path to the module manager
-    await MigratePermissionsToModuleManager(path, rootModuleManager, matchScriptName, matchClassName);
+    await MigratePermissionsToModuleManager(dirPath, rootModuleManager, matchScriptName, matchClassName);
 
     // Return the root module manager
     return rootModuleManager;
 }
 
 // Migrate the permissions from the metadata of each method from the given path to the module manager
-export async function MigratePermissionsToModuleManager(path, rootModuleManager, matchScriptName, matchClassName) {
+export async function MigratePermissionsToModuleManager(dirPath, rootModuleManager, matchScriptName, matchClassName) {
     // Get the files and folders from the given path
-    const filesAndFolders = fs.readdirSync(path);
+    const filesAndFolders = fs.readdirSync(dirPath);
 
     // Iterate over the files and folders
     for (const name of filesAndFolders) {
-        const nestedPath = path.join(path, name);
+        const nestedPath = path.join(dirPath, name);
         const stats = fs.statSync(nestedPath);
 
         // Check if it is a directory
