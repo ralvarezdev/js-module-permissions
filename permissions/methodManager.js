@@ -1,7 +1,7 @@
 // Method manager class to manage the permissions of a method
 export default class MethodManager {
     #name
-    #profiles={}
+    #profiles = {}
     #method
 
     // Initialize the method with a name and its function

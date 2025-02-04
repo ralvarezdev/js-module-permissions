@@ -9,60 +9,70 @@ export const METHOD_ALREADY_EXISTS_ERROR = 'Method already exists'
 export default class ObjectManager {
     #scriptPath
     #script
-    #name
+    #className
+    #instanceName
     #methods = {}
 
-    // Initialize the object with a name
-    constructor(scriptPath, name) {
+    // Initialize the object with a class name and an instance name
+    constructor(scriptPath, className, instanceName) {
         // Set the script path
         this.#scriptPath = scriptPath
 
         // Create a script object
         this.#script = new Script(scriptPath)
 
-        // Set the object name
-        this.#name = name
+        // Set the class name and instance name
+        this.#className = className
+        this.#instanceName = instanceName
     }
 
-    // Get the name of the object
-    get name() {
-        return this.#name
+    // Get the name of the object class
+    get className() {
+        return this.#className
+    }
+
+    // Get the name of the object instance
+    get instanceName() {
+        return this.#instanceName
     }
 
     // Get the class of the object from the script
     async getClass() {
-        return await this.#script.getClass(this.#name)
+        return await this.#script.getClass(this.#className)
     }
 
     // Get the class methods of the object from the script
     async getClassMethods() {
-        return await this.#script.getClassMethods(this.#name)
+        return await this.#script.getClassMethods(this.#className)
     }
 
-    // Add a method to the object manager
-    addMethod(method) {
-        // Check if the method already exists
-        if (this.#methods[method.name])
-            throw new Error(METHOD_ALREADY_EXISTS_ERROR + ": " + method.name)
-
-        this.#methods[method.name] = method
+    // Get the instance of the object from the script
+    async getInstance() {
+        return await this.#script.getObject(this.#instanceName)
     }
 
-    // Add methods to the object manager
-    addMethods(...methods) {
-        methods.forEach(method => this.addMethod(method))
+    // Get the instance method from the object
+    async getInstanceMethod(name) {
+        return await this.#script.getObjectFunctionProperty(this.#instanceName, name)
     }
 
     // Create a new method in the object manager
-    createMethod(name, method, ...allowedProfiles) {
+    createMethod(name, ...allowedProfiles) {
+        // Get the instance method
+        const method = this.getInstanceMethod(name)
+
         // Create a new method
         const methodManager = new MethodManager(name, method)
 
         // Set the allowed profiles for the method
         methodManager.allow(...allowedProfiles)
 
-        // Add the method to the module manager
-        this.addMethod(methodManager)
+        // Check if the method already exists
+        if (this.#methods[name])
+            throw new Error(METHOD_ALREADY_EXISTS_ERROR + ": " + name)
+
+        // Add the method to the methods object
+        this.#methods[name] = methodManager
 
         return methodManager
     }
@@ -93,11 +103,6 @@ export default class ObjectManager {
             throw new Error(METHOD_NOT_FOUND_ERROR + ": " + name)
 
         delete this.#methods[name]
-    }
-
-    // Get method function
-    async getMethodFunction(name) {
-        return await this.#script.getObjectProperty(this.#name, name)
     }
 
     // Allow the method to be executed by a user with a specific profile

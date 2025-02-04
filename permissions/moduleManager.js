@@ -14,8 +14,8 @@ const scripts = {}
 // Routes module management for permissions
 export default class ModuleManager {
     #name
-    #nestedModules={}
-    #objects={}
+    #nestedModules = {}
+    #objects = {}
 
     // Initialize the module manager
     constructor(name) {
@@ -87,27 +87,17 @@ export default class ModuleManager {
         this.#nestedModules = {}
     }
 
-    // Add an object to the module manager
-    addObject(object) {
-        // Check if the object already exists
-        if (this.#objects[object.name])
-            throw new Error(OBJECT_ALREADY_EXISTS_ERROR + ": " + object.name)
-
-        this.#objects[object.name] = object
-    }
-
-    // Add objects to the module manager
-    addObjects(...objects) {
-        objects.forEach(object => this.addObject(object))
-    }
-
     // Create a new object in the module manager
-    createObject(scriptPath, objectName) {
+    createObject(scriptPath, className,instanceName) {
         // Create a new object
-        const object = new ObjectManager(scriptPath, objectName)
+        const object = new ObjectManager(scriptPath,className, instanceName)
+
+        // Check if the object already exists
+        if (this.#objects[object.instanceName])
+            throw new Error(OBJECT_ALREADY_EXISTS_ERROR + ": " + object.instanceName)
 
         // Add the object to the module manager
-        this.addObject(object)
+        this.#objects[object.instanceName] = object
 
         return object
     }
@@ -140,31 +130,13 @@ export default class ModuleManager {
         delete this.#objects[name]
     }
 
-    // Add a method to the module manager
-    addMethod(objectName, method) {
-        // Get the object
-        const object = this.getObject(objectName)
-
-        // Add the method to the object
-        object.addMethod(method)
-    }
-
-    // Add methods to the module manager
-    addMethods(objectName, ...methods) {
-        // Get the object
-        const object = this.getObject(objectName)
-
-        // Add the methods to the object
-        methods.forEach(method => this.addMethod(method))
-    }
-
     // Create a new method in the module manager
-    createMethod(objectName, methodName, methodFn, ...allowedProfiles) {
+    createMethod(objectName, methodName, ...allowedProfiles) {
         // Get the object
         const object = this.getObject(objectName)
 
         // Create a new method
-        return object.createMethod(methodName, methodFn, allowedProfiles)
+        return object.createMethod(methodName, allowedProfiles)
     }
 
     // Checks if a method exists in the module manager
