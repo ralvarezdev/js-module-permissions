@@ -3,12 +3,16 @@ import {NewRootModuleManager} from "./moduleManager.js";
 import {GetMetadataProfiles} from "./decorator.js";
 import path from "path";
 
-// Migrate the permissions from the metadata of each method from the given path
+// Migrate the permissions from the metadata of each method from the given path.
+// - dirPath: The directory path to migrate the permissions from.
+// - matchScriptNameFn: The function to check if the script name has to be migrated.
+// - classNameFn: The function to get the class name from the script name.
+// - instanceNameFn: The function to get the instance name from the script name.
 export default async function MigratePermissions(options = {
     dirPath: null,
-    scriptName: null,
-    className: null,
-    instanceName: null,
+    matchScriptNameFn: null,
+    classNameFn: null,
+    instanceNameFn: null,
     logger: null,
 }) {
     // Create the root module manager
@@ -28,9 +32,9 @@ export default async function MigratePermissions(options = {
 export async function MigratePermissionsToModuleManager(options = {
     module: null,
     dirPath: null,
-    scriptName: null,
-    className: null,
-    instanceName: null,
+    matchScriptNameFn: null,
+    classNameFn: null,
+    instanceNameFn: null,
     logger: null,
 }) {
     // Log the directory path
@@ -62,7 +66,7 @@ export async function MigratePermissionsToModuleManager(options = {
             });
         } else {
             // Check if the script name matches
-            if (options.scriptName && name !== options.scriptName)
+            if (options.matchScriptNameFn && !options.matchScriptNameFn(name))
                 continue;
 
             // Log the script name
@@ -70,7 +74,7 @@ export async function MigratePermissionsToModuleManager(options = {
                 options.logger.info(`Script found: ${name}`);
 
             // Create the object manager and add it to the module manager
-            const objectManager = options.module.createObject(nestedPath, options.className, options.instanceName);
+            const objectManager = options.module.createObject(nestedPath, name, options.classNameFn, options.instanceNameFn);
 
             // Migrate the permissions from the metadata of each method from the nested path to the object manager
             await MigratePermissionsToObjectManager({

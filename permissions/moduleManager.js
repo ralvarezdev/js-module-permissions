@@ -88,18 +88,24 @@ export default class ModuleManager {
     }
 
     // Create a new object in the module manager
-    createObject(scriptPath, className,instanceName) {
+    createObject(scriptPath, scriptName, classNameFn,instanceNameFn) {
+        // Get the class name
+        const className = classNameFn(scriptPath, scriptName)
+
+        // Get the instance name
+        const instanceName = instanceNameFn(scriptPath, scriptName)
+
         // Create a new object
-        const object = new ObjectManager(scriptPath,className, instanceName)
+        const objectManager = new ObjectManager(scriptPath,className, instanceName)
 
         // Check if the object already exists
-        if (this.#objects[object.instanceName])
-            throw new Error(OBJECT_ALREADY_EXISTS_ERROR + ": " + object.instanceName)
+        if (this.#objects[instanceName])
+            throw new Error(OBJECT_ALREADY_EXISTS_ERROR + ": " + instanceName)
 
         // Add the object to the module manager
-        this.#objects[object.instanceName] = object
+        this.#objects[instanceName] = objectManager
 
-        return object
+        return objectManager
     }
 
     //  Checks if an object exists in the module manager
