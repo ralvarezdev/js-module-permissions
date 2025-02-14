@@ -103,7 +103,7 @@ export default class ModuleManager {
             throw new Error(OBJECT_ALREADY_EXISTS_ERROR + ": " + className)
 
         // Add the object to the module manager
-        this.#objects[instanceName] = objectManager
+        this.#objects[className] = objectManager
 
         return objectManager
     }
