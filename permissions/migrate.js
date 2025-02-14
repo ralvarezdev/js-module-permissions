@@ -105,6 +105,10 @@ export async function MigratePermissionsToObjectManager(options = {
         // Get the allowed profiles for the method
         const allowedProfiles = GetMetadataProfiles(Class, classMethodName);
 
+        // Log the allowed profiles
+        if (options.logger)
+            options.logger.info(`Class method '${classMethodName}' has allowed profiles: ${allowedProfiles}`);
+
         // Create a new method in the object manager
         options.object.createMethod(classMethodName, ...allowedProfiles);
     }
