@@ -14,13 +14,25 @@ const scripts = {}
 // Routes module management for permissions
 export default class ModuleManager {
     #name
+    #parentModule=null
     #nestedModules = {}
     #objects = {}
 
     // Initialize the module manager
-    constructor(name) {
-        // Set the module manager name
+    constructor(parentModule, name) {
+        // Set the module manager parent module and name
+        this.#parentModule=parentModule
         this.#name = name
+    }
+
+    // Get the module manager parent module
+    get parentModule() {
+        return this.#parentModule
+    }
+
+    // Set the module manager parent module
+    set parentModule(parentModule){
+        return this.#parentModule = parentModule
     }
 
     // Get the module manager name
@@ -34,7 +46,11 @@ export default class ModuleManager {
         if (this.#nestedModules[nestedModule.name])
             throw new Error(NESTED_MODULE_ALREADY_EXISTS_ERROR + ": " + nestedModule.name)
 
+        // Set the nested module
         this.#nestedModules[nestedModule.name] = nestedModule
+
+        // Set the parent module
+        nestedModule.parentModule=this
     }
 
     // Add nested modules to the module manager
@@ -45,7 +61,7 @@ export default class ModuleManager {
     // Create a new nested module in the module manager
     createNestedModule(name) {
         // Create a new nested module
-        const nestedModule = new ModuleManager(name)
+        const nestedModule = new ModuleManager(this, name)
 
         // Add the nested module to the module manager
         this.addNestedModule(nestedModule)
